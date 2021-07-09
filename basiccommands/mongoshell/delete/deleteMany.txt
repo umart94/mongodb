@@ -1,0 +1,11 @@
+db.students.deleteMany({age: {$eq : 35}});
+
+
+> db.students.deleteMany({age: {$eq : 35}});
+{ "acknowledged" : true, "deletedCount" : 1 }
+> db.students.deleteMany({age: {$eq : 326}});
+{ "acknowledged" : true, "deletedCount" : 0 }
+> db.students.deleteMany({age: {$eq : 26}});
+{ "acknowledged" : true, "deletedCount" : 1 }
+> db.students.deleteMany({age: {$eq : 30}});
+{ "acknowledged" : true, "deletedCount" : 2 }

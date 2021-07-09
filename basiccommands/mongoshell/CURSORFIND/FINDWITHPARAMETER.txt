@@ -1,0 +1,10 @@
+db.students.find( { favourite_colors: ["green","silver"] } ).pretty();
+
+will return students with favourite colors green and silver.
+
+
+
+db.students.find( { favourite_colors: ["green","silver"] } ).toArray();
+
+
+this converts to JSON array.

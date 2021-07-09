@@ -1,0 +1,12 @@
+by default a write operation is acknowledged as soon as data is written at
+the primary , however that may result in data loss , if the primary goes down
+before the data is replicated to the secondary nodes.
+
+so, when we issue the write operation from the application client
+
+we can specify a write concern of 2 or more nodes.
+
+we can specify write concern majority to force the writes
+to propagate to majority of the nodes regardless of the cluster size.
+
+this is one of the reasons it is recommended, we have an odd number of nodes at each replication set

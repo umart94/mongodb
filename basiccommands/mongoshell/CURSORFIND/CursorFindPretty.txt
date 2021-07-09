@@ -1,0 +1,11 @@
+db.students.find().pretty();
+
+a cursor is an object that allows to iterate through the documents of a Mongo collection. The behavior of cursor allows an automatic iteration across the results of the query; however, developers can explicitly go through the items returned in the cursor object.
+
+Cursor offers:
+
+A true snapshot of a system i.e. it returns the data in batches and increases the database performance
+It saves system memory by allowing batch inserts and updates
+Intelligibility and Clarity on the ad-hoc and complex queries of the sequential nature having large result sets and low consistency requirements
+Openness to work on small batches of data as developers don’t need to wait for the processing and download of the complete record-set
+

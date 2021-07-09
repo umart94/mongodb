@@ -1,0 +1,80 @@
+
+
+remove the {} from beginning
+
+then, add another {} at the end.. and put _id:0 there.
+wont show object id. or custom id of fields.
+db.students.find( { age : {$gt : 26} },{_id: 0} ).pretty();
+
+we can do this for any attributes : 
+
+{field: {$gt: value} }
+
+
+> db.students.find( { age: {$gt : 26} }, { _id: 0 , name: 1, favourite_colors: 1} );
+{ "name" : "Muhammad Umar Tariq", "favourite_colors" : [ "green", "gray" ] }
+{ "name" : "muhammad uzair ahmed", "favourite_colors" : [ "green", "white" ] }
+{ "name" : "Muhammad Umar Tariq", "favourite_colors" : [ "red", "black" ] }
+{ "name" : "muhammad uzair ahmed", "favourite_colors" : [ "green", "blue" ] }
+>
+
+
+
+
+
+
+
+
+
+
+
+
+now condition is on two colors.
+
+FIND ALL STUDENTS, WITH FAVOURITE COLORS EITHER green OR EITHER BLACK.
+
+db.students.find( { $or : [{favourite_colors:"green"},{favourite_colors:"black"}] }, { _id: 0 , name: 1, favourite_colors: 1} );
+
+
+db.students.find( { $or : [{favourite_colors:"gray"},{favourite_colors:"silver"}] }, { _id: 0 , name: 1, favourite_colors: 1} );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.students.find( { $or : [{favourite_colors:"green"},{favourite_colors:"black"}] }, { _id: 0 , name: 1, favourite_colors: 1} );
+{ "name" : "umar", "favourite_colors" : [ "green", "silver" ] }
+{ "name" : "mumartariq", "favourite_colors" : [ "gray", "black" ] }
+{ "name" : "Muhammad Umar Tariq", "favourite_colors" : [ "green", "gray" ] }
+{ "name" : "muhammad uzair ahmed", "favourite_colors" : [ "green", "white" ] }
+{ "name" : "Muhammad Umar Tariq", "favourite_colors" : [ "red", "black" ] }
+{ "name" : "muhammad uzair ahmed", "favourite_colors" : [ "green", "blue" ] }
+
+
+
+> db.students.find( { $or : [{favourite_colors:"gray"},{favourite_colors:"silver"}] }, { _id: 0 , name: 1, favourite_colors: 1} );
+{ "name" : "umar", "favourite_colors" : [ "green", "silver" ] }
+{ "name" : "mumartariq", "favourite_colors" : [ "gray", "black" ] }
+{ "name" : "Muhammad Umar Tariq", "favourite_colors" : [ "green", "gray" ] }
+
+
+
+
+
+
+
+db.students.find( { $or : [{favourite_colors:"gray"},{favourite_colors:"silver"}] }, { _id: 0 , name: 1, favourite_colors: 1} ).limit(1);

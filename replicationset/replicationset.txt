@@ -1,0 +1,241 @@
+For single instance, we need 1 data folder.
+For replication set for N number of nodes,
+we need N number of data directories.
+
+make 3 directories in mongodb folder
+
+rs0-0
+rs0-1
+rs0-2
+
+
+launch replication set
+
+mongod --replSet rs0 --port 27017 --bind_ip 127.0.0.1 --dbpath C:\mongodb\rs0-0 --oplogSize 128
+
+--replSet rs0 ( give a name to replication set)
+--dbpath C:\mongodb\rs0-0 ( keep directory names in proper sequential order, and use same names.)
+
+oplog - operations log file , records about data modifications for recovery from failures.
+
+
+specify different ports 
+
+
+mongod --replSet rs0 --port 27017 --bind_ip 127.0.0.1 --dbpath C:\mongodb\rs0-0 --oplogSize 128
+
+
+mongod --replSet rs0 --port 27018 --bind_ip 127.0.0.1 --dbpath C:\mongodb\rs0-1 --oplogSize 128
+
+
+mongod --replSet rs0 --port 27019 --bind_ip 127.0.0.1 --dbpath C:\mongodb\rs0-2 --oplogSize 128
+
+
+
+we can either do this, or put these config parameters into 3 seperate config files.
+
+
+Step 2: connect to any of the nodes, that is a part of the replication set.
+
+mongo --port 27017
+
+
+Step3 : call rs.initiate method, that will initialize all the replication set nodes with the ip address , port number, directory suffix id , and directory prefix id we gave it (i.e the instance we are running , the name we assigned to it using --replSet parameter in mongodb command above. --replSet rs0)
+
+
+Step 3 : command
+
+rs.initiate(
+   {
+      _id: "rs0",
+      members: [
+         { _id: 0, host : "127.0.0.1:27017" },
+         { _id: 1, host : "127.0.0.1:27018" },
+         { _id: 2, host : "127.0.0.1:27019" }
+      ]
+   }
+)
+
+once we run this command, our three nodes join together , and run an election
+which elects one of our nodes to be a primary and the rest of the nodes become the secondary nodes.
+
+
+AFTER RUNNING THE COMMAND
+KEEP THIS WINDOW OPEN
+
+OPEN 2 OTHER CMD
+open 27018
+27019
+
+those show up as rs0:SECONDARY>
+
+
+?compressors=disabled&gssapiServiceName=
+
+Implicit session: session { "id" :
+
+Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+
+--------------------------
+ok	A number that indicates whether the command has succeeded (1) or failed (0).
+----------------------------
+$operationTime
+The logical time of the performed operation, represented in MongoDB by the timestamp from the oplog entry. Only for replica sets and sharded clusters
+
+If the command does not generate an oplog entry, e.g. a read operation, then the operation does not advance the logical clock. In this case, operationTime returns:
+
+For read concern "local", the timestamp of the most recent entry in the oplog.
+For read concern "majority" and "linearizable", the timestamp of the most recent majority-acknowledged entry in the oplog.
+For operations associated with causally consistent sessions, MongoDB drivers use this time to automatically set the Read Operations and afterClusterTime.
+
+New in version 3.6.
+
+----------------------------
+
+$clusterTime 
+
+	
+A document that returns the signed cluster time. Cluster time is a logical time used for ordering of operations. Only for replica sets and sharded clusters. For internal use only.
+
+The document contains the following fields:
+
+clusterTime: timestamp of the highest known cluster time for the member.
+signature: a document that contains the hash of the cluster time and the id of the key used to sign the cluster time.
+New in version 3.6.
+
+
+ClusterTime encapsulates cluster time storage and operations.
+
+The primary operation performed on the cluster time is advancing it: given another cluster time, pick the newer of the two.
+
+This class provides comparison methods that are used to figure out which cluster time is newer, and provides diagnostics in lint mode when the actual time is missing from a cluster time document.
+
+ String courseName = args[0];
+        String studentsName = args[1];
+        int studentsAge = Integer.parseInt(args[2]);
+        double studentsGPA = Double.parseDouble(args[3]);
+
+mvn clean package
+java -jar mongodb-reader-1.0-SNAPSHOT-jar-with-dependencies.jar physics umar 26 2.75
+Invalid Course physics
+
+NOW WE NEED TO CONNECT TO THE PRIMARY NODE !!!!! ( NOT TO SECONDARY)
+
+mongo --port 27017
+
+rs0:PRIMARY>
+
+run
+
+show dbs
+
+rs0:PRIMARY> use online-school
+switched to db online-school
+
+db.createCollection("physics")
+
+show collections
+
+now run this command again : 
+
+java -jar mongodb-reader-1.0-SNAPSHOT-jar-with-dependencies.jar physics umar 26 3.2
+
+
+>java -jar mongodb-reader-1.0-SNAPSHOT-jar-with-dependencies.jar physics umar 26 3.2
+Student umar was successfully enrolled in physics
+Document{{_id=5faf87c947f44c25173ae17f, name=umar, age=26, gpa=3.2}}
+
+
+
+
+run command again : 
+
+D:\programming\java\Distributed\mongodb-reader\target>java -jar mongodb-reader-1.0-SNAPSHOT-jar-with-dependencies.jar physics umar 26 3.2
+Student : umar already enrolled
+
+
+
+run command again, " WITH A LOW CGPA THRESHOLD........"
+
+
+java -jar mongodb-reader-1.0-SNAPSHOT-jar-with-dependencies.jar physics umar 26 1.5
+
+
+java -jar mongodb-reader-1.0-SNAPSHOT-jar-with-dependencies.jar physics bugsbunny 26 1.5
+Please improve your grades
+
+
+
+java -jar mongodb-reader-1.0-SNAPSHOT-jar-with-dependencies.jar physics daffyduck 24 4.0
+
+
+java -jar mongodb-reader-1.0-SNAPSHOT-jar-with-dependencies.jar physics daffyduck 24 4.0
+Student daffyduck was successfully enrolled in physics
+Document{{_id=5faf87c947f44c25173ae17f, name=umar, age=26, gpa=3.2}}
+Document{{_id=5faf887ccfe452539ff1c9e8, name=bugsbunny, age=26, gpa=4.0}}
+Document{{_id=5faf88ed3f13465b97473b42, name=daffyduck, age=24, gpa=4.0}}
+
+
+
+
+
+
+
+
+failure injection : 
+
+delete the primary node
+
+keep 1 to 2 secondary nodes running
+
+run the command again, it should run : and save the data.
+
+mongo -port 27017 this is the client
+
+we delete this as well as the server we ran i.e
+the replicaSet we ran on port 27017
+
+
+WHEN YOU DELETE 27017 node, the 27018 and 27019 nodes will constantly send
+heartbeat retry messages.
+
+
+now delete the clients as well
+
+
+now, run mongo --port 27018 first.
+
+so the instance running on port 27018 will show up to be primary
+
+mongo --port 27018
+rs0:PRIMARY>
+
+mongo --port 27019
+rs0:SECONDARY>
+
+Exception in thread "main" com.mongodb.MongoTimeoutException: Timed out after 30000 ms while waiting for a server that matches ReadPreferenceServerSelector{readPreference=primary}
+
+this occured, because we removed the mongo --port 27017, i.e application client..... but the server was still running..
+
+
+after we delete 27017 and keep 27018 and 27019 running we get : 
+
+
+
+
+java -jar mongodb-reader-1.0-SNAPSHOT-jar-with-dependencies.jar physics thomasthecat 23 3.2
+
+
+now we run this command, and 27017 is not running, but we still save the data to our replicaSet.
+
+
+java -jar mongodb-reader-1.0-SNAPSHOT-jar-with-dependencies.jar physics thomasthecat 23 3.2
+Student thomasthecat was successfully enrolled in physics
+Document{{_id=5faf87c947f44c25173ae17f, name=umar, age=26, gpa=3.2}}
+Document{{_id=5faf887ccfe452539ff1c9e8, name=bugsbunny, age=26, gpa=4.0}}
+Document{{_id=5faf88ed3f13465b97473b42, name=daffyduck, age=24, gpa=4.0}}
+Document{{_id=5faf8b6903bbc6056d252bea, name=thomasthecat, age=23, gpa=3.2}}
+
+the failure in any single node is transparent to the client.
+our cluster is available for new writes and reads
+

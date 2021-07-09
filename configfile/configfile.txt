@@ -1,0 +1,10 @@
+Configuration File¶
+You can configure mongod and mongos instances at startup using a configuration file. The configuration file contains settings that are equivalent to the mongod and mongos command-line options. See Configuration File Settings and Command-Line Options Mapping.
+
+Using a configuration file makes managing mongod and mongos options easier, especially for large-scale deployments. You can also add comments to the configuration file to explain the server’s settings.
+
+DEFAULT CONFIGURATION FILE
+
+On Linux, a default /etc/mongod.conf configuration file is included when using a package manager to install MongoDB.
+On Windows, a default <install directory>/bin/mongod.cfg configuration file is included during the installation.
+On macOS, a default /usr/local/etc/mongod.conf configuration file is included when installing from MongoDB’s official Homebrew tap.

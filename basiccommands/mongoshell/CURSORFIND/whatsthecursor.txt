@@ -1,0 +1,5 @@
+The cursor lives server side. It is not distributed over a replica set but exists on the instance that is primary at the time of creation. This means that if another instance takes over as primary the cursor will be lost to the client. If the old primary is still up and around it may still be there but for no use. I guess it is garbaged collected away after a while. So if your mongo replica set is unstable or you have a shaky network in front of it you are out of luck when doing any long running queries.
+
+If the full content of what the cursor wants to return does not fit in memory on the server the query may be very slow. RAM on your servers needs to be larger than the largest query you run.
+
+All this can partly be avoided by designing better. For a use case with large long running queries you may be better of with several smaller database collections instead of a big one.

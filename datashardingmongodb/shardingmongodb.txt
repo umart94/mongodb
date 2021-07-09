@@ -1,0 +1,87 @@
+sharding in mongodb
+
+mongodb router and config servers
+
+
+1. hash based strategy
+
+a hash function applied on each document key , which determines chunk to which document gets assigned , document may be hashed to different chunks
+
+
+
+
+2. range based strategy
+
+key is not the factor here for sharding, instead we simply need to find the
+chunk that corresponds to range of keys that documents key falls into ( ???)
+
+much more likely to be part of the same chunk.
+
+Chunk routing to shards
+
+chunks are distributed evenly
+stored on mongodb shards
+
+
+chunks become bigger as they contain more docs
+
+chunk splits based on size
+
+if chunks in shard exceed limit, of size
+we transfer chunks to another shard.
+
+
+----------------------
+
+decide on sharding key and collection
+
+choose any field as sharding key
+but this decision cant be changed later
+
+records are seperated into chunks
+each chunk has a lower and upper bound
+
+all chunks are covered in entire keyspace
+
+which documents are related to which chunks is based on sharding strategy
+
+
+
+
+
+
+------------------------------
+
+
+
+mongodb sharded cluster
+
+q: client app talks to which shard ?
+
+we need a additional component called router
+
+router runs mongos instance that directs query to shards
+based on current location of chunks
+
+
+
+the component that decides where each chunk is located is config server ( running mongod instance) also performs balancing among shards.
+
+
+IN PRODUCTION : 
+mongodb forces us to run config server as a replicationset.
+the router mongos instances are run as a pool of instances.
+the shards are also run as replication sets.
+
+to ensure full availability. and fault tolerance.
+
+now we can add more servers and more shards.
+
+
+
+
+
+
+
+
+

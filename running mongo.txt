@@ -1,0 +1,34 @@
+add bin dir to path
+run command
+
+on linux we run service name e.g mongod
+
+on windows, run exe.
+mongod.exe --config C:\mongodb\bin\mongod.cfg -v
+
+Before deleting any files, try to repair the database upon startup:
+
+mongod --repair
+
+
+mongodb service must be running
+
+file permission of mongodb folder must be correct
+
+
+Now :
+
+either use windows service
+and open 2nd command prompt and enter mongo..
+
+
+
+or use the config file in 1 command prompt
+and mongo in another command prompt..
+
+commands for running the mongod.exe service :
+mongod.exe --config C:\mongodb\bin\mongod.cfg -v
+
+
+command for running mongo shell : 
+mongo

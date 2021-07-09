@@ -1,0 +1,16 @@
+before update
+{
+        "_id" : "2de",
+        "name" : "muhammad uzair ahmed",
+        "age" : 35,
+        "favourite_colors" : [
+                "green",
+                "blue"
+        ]
+}
+
+db.students.updateOne({_id:"2de"},{ $set: {age: 36 } });
+
+after update
+
+{ "_id" : "2de", "name" : "muhammad uzair ahmed", "age" : 36, "favourite_colors" : [ "green", "blue" ] }

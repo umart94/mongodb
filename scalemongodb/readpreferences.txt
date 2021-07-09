@@ -1,0 +1,22 @@
+all read operations directed to primary to guarantee
+strict consistency
+
+we change this using read preference
+
+when we issue the read request, we can set read preference to primaryPreferrred to still read from
+the primary when its available..
+
+or if primary is failed and new primary is not elected yet by secondary nodes then, we can still read from
+secondary nodes that are not too much out of sync
+
+if number of reads is too much for primary
+
+and we do not use strict consistency
+
+BUT INSTEAD OF STRICT CONSISTENCY, WE USE EVENTUAL CONSISTENCY THEN WE CAN USE THE SECONDARY READ PREFERENCE WITH THE READ OPERATION.
+
+
+if we deploy the replication set nodes to seperate physical locations, we can specify the read preference to be "nearest" to read from the node that has the lowest latency , to our application client.
+
+this may also read  stale data , however this is a 
+tradeoff in this approach.

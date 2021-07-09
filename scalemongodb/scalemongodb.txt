@@ -1,0 +1,33 @@
+mongodb replication sets
+read preferences
+write semantics
+
+we wrote data and read data through
+Application Client ( command prompt  - mongoshell ) to mongodb using a single instance of mongodb.
+
+all through single node.
+
+to provide data redundancy and availability. , and resilience to failures
+of individual nodes. we are going to replicate our data by launching
+multiple instances of mongodb
+
+
+A GROUP OF MONGODB INSTANCES  , THAT CONTAIN THE SAME DATA IS CALLED A 
+REPLICATION SET.
+
+
+
+inside a replication set, 1 node is primary ( that holds the data written to it) and the rest are secondary nodes, this is a variation of the master slave architecture.   
+
+
+by default , all reads and writes go to the primary node
+the secondary nodes constantly sync with the primary node to stay upto date
+
+if primary node fails
+the secondary nodes detect that and hold an election to elect the new primary node
+
+until that election completes , no write operation can be acknowledged.
+once the old primary node recovers, it can join back either as a primary or
+as a secondary depending on our configuration.
+
+

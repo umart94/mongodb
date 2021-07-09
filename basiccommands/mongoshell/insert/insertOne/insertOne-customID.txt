@@ -1,0 +1,58 @@
+db.students.insertOne({"_id":"4ut","name" : "umartariq", "age": 23, favourite_colors: ["darkgreen","lightgray"]});
+
+> db.students.insertOne({"_id":"4ut","name" : "umartariq", "age": 23, favourite_colors: ["darkgreen","lightgray"]});
+{ "acknowledged" : true, "insertedId" : "4ut" }
+
+Traditional databases often use monotonically increasing sequence numbers for primary keys. In MongoDB, the preferred approach is to use the automatically generated Object IDs instead. Object IDs are more synergistic with sharding and distribution.
+
+but in case of indexing ( we have a code base where we need indexing by the custom _id field, we can use a custom id)..
+
+
+
+
+
+-- [HAVING A AUTOMATIC ID IS USEFUL, BUT IN PRODUCTION, WE DON'T WANT TO EXPOSE THE AUTOMATICALLY GENERATED OBJECTID TO THE USERS, BECAUSE IT WILL EXPOSE A LOT OF THE PROPERTIES OF COLLECTION / RECORD TO THE USERS (VULNERABILITIES/ BUGS /HACKERS ETC.)] ---
+
+
+I can't think of any real security risk to exposing the mongoDB id (versus some other counter id), other than exposing creation time according to the server to the users. Having the mongo primary key vs some other unique key (like a counter) shouldn't make a difference in terms of exposure.
+
+Granted you should be aware, the mongo _id consists of:
+
+a 4-byte value representing the seconds since the Unix epoch,
+a 3-byte machine identifier,
+a 2-byte process id, and
+a 3-byte counter, starting with a random value.
+and possibly you don't want to expose some of this information to your users (like creation time).
+
+So when you have the id 56ede7f0dfdsfdsfs2a7283 (which has a non-hex digit in there s and seems to be missing a hex digit at the end -- it should be 12 bytes or 24 hex (0-9a-f) digits, so I've replaced the 's' with '0'), I can tell from 56ede7f0 that it was created at 2016-03-19T23:59:44.000Z. (See for example: https://steveridout.github.io/mongo-object-time/ or try: ObjectId("56ede7f0dfd0fd0f20a72830").getTimestamp() in the shell).
+
+
+
+
+
+The OWASP mentions that simply having any sort of direct identifier can be bad, as explained in the Top 10 2007-Insecure Direct Object Reference and Top 10 2010-A4-Insecure Direct Object References entries. An attacker that can figure out how to exploit such an direct reference will have far more power than they should.
+
+The OWASP actually recommends using an index value, as you've asked about here, but those can come with their own problems. Giving attackers a nice, easy way to access all your data sequentially can allow them to easily read, update, or even delete your entire database if they find an authentication or privilege escalation exploit.
+
+In the real world, such occurrences have happened before. Like several email address dumps gained from services using a simple primary key in a password reset page. Or systemically having all of their messages deleted from the service. The list can go on, but the point is, if you decide to use a auto-increment field as the primary key, make sure that all pages that use that ID validate the request to be sure that (a) the user has sufficient permission, and (b) the request has not been forged, probably by way of including cross-site request forgery tokens, essentially nonce values that verify that the request is legitimate.
+
+
+see : 
+https://owasp.org/www-project-top-ten/
+
+
+
+The better practice is to let mongodb generate the objectids for us , 
+
+UNLESS we can guarantee the uniqueness of our own ids.
+
+
+
+
+
+
+
+
+
+
+

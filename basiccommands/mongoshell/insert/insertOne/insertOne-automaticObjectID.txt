@@ -1,0 +1,32 @@
+db.students.insertOne({"name" : "umar", "age": 26, favourite_colors: ["green","silver"]});
+
+> db.students.insertOne({"name" : "umar", "age": 26, favourite_colors: ["green","silver"]});
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("5facc4e4b5241764bcb1476f")
+}
+
+
+This is exactly why the developers of MongoDB constructed their ObjectID's (the _id) the way they did ... to scale across nodes, etc.
+
+A BSON ObjectID is a 12-byte value consisting of a 4-byte timestamp (seconds since epoch), a 3-byte machine id, a 2-byte process id, and a 3-byte counter. Note that the timestamp and counter fields must be stored big endian unlike the rest of BSON. This is because they are compared byte-by-byte and we want to ensure a mostly increasing order. Here's the schema:
+
+0123   456      78    91011
+time   machine  pid   inc
+Traditional databases often use monotonically increasing sequence numbers for primary keys. In MongoDB, the preferred approach is to use Object IDs instead. Object IDs are more synergistic with sharding and distribution.
+
+http://www.mongodb.org/display/DOCS/Object+IDs
+
+So I'd say just use the ObjectID's
+
+They are not that bad when converted to a string (these were inserted right after each other) ...
+
+For example:
+
+4d128b6ea794fc13a8000001
+4d128e88a794fc13a8000002
+They look at first glance to be "guessable" but they really aren't that easy to guess ...
+
+4d128 b6e a794fc13a8000001
+4d128 e88 a794fc13a8000002
+And for a blog, I don't think it's that big of a deal ... we use it production all over the place.

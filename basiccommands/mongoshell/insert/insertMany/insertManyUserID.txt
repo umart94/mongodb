@@ -1,0 +1,8 @@
+db.students.insertMany([{"_id":"1ab","name" : "Muhammad Umar Tariq","age": 30,favourite_colors: ["red","black"]},{"_id":"2de","name" : "muhammad uzair ahmed",
+"age": 35,favourite_colors: ["green","blue"]}]);
+
+
+
+> db.students.insertMany([{"_id":"1ab","name" : "Muhammad Umar Tariq","age": 30,favourite_colors: ["red","black"]},{"_id":"2de","name" : "muhammad uzair ahmed",
+... "age": 35,favourite_colors: ["green","blue"]}]);
+{ "acknowledged" : true, "insertedIds" : [ "1ab", "2de" ] }

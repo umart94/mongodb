@@ -1,0 +1,10 @@
+db.bios.find(
+   { },
+   { name: 1, contribs: 1, _id: 0 }
+)
+
+
+
+THIS RETURNS ALL THE FIELDS, but wont show the Object ID, customId.
+db.students.find( {}, { favourite_colors: 1,name: 1, _id: 0 } ).pretty();
+

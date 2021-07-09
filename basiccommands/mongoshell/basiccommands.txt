@@ -1,0 +1,57 @@
+help
+
+show dbs
+
+Run the mongo command and log in to the MongoDB self-managed cluster.
+you can see all the databases in a cluster that you have access to using the “show” command:
+
+
+Note that admin and local are databases that are part of every MongoDB cluster.
+
+From here on out there are only two tricky things to remember.
+
+The first is that there isn’t a “create” command in the MongoDB shell.
+
+To create a database you use the use command. If the database doesn’t exist, then the MongoDB cluster will create it.
+
+In other words, a database is created when you try to use it with the “use” command.
+
+But let’s say you entered the following command to create a new database:
+
+
+
+use online-school
+switched to db online-school
+
+created and shifted to online-school
+
+show dbs
+
+will not show it, the newly created online-school db
+
+so now , until we add something ( collection / document ) to database
+it will not show up
+
+
+db.students.insertOne({"name" : "umar", "age": 26, favourite_colors: ["green","silver"]});
+
+> db.students.insertOne({"name" : "umar", "age": 26, favourite_colors: ["green","silver"]});
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("5facc4e4b5241764bcb1476f")
+}
+
+run command : 
+
+show collections
+it should show students
+
+
+use <db>	Switch current database to <db>. The mongo shell variable db is set to the current database.
+
+
+
+show users	Print a list of users for current database.
+
+
+

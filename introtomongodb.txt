@@ -1,0 +1,72 @@
+mongodb is a scalable , nosql Document oriented database
+
+
+what document Document oriented database means is that
+instead of storing data in tables like sql we store data in database
+directly in json format
+
+mongodb stores data in a format called BSON Serialization.
+
+
+think of a row in a sql database table as a OBJECT/DOCUMENT in mongodb.
+
+the columns in sql record can be thought of as fields 
+in the mongodb document
+
+the primary key in sql is equivalent to _id ObjectId in Mongodb
+
+a table in sql is equivalent to a Collection in MongoDB
+
+SQL				NOSQL
+ROW 			 OBJECT/DOCUMENT
+COLUMNS				FIELDS
+PRIMARY KEY			ID / OBJECTID
+TABLE				COLLECTION
+
+
+
+MONGODB CRUD operations :
+
+CREATE
+READ
+UPDATE
+DELETE
+
+in same way as sql, the exception is that the document's "_id" is immutable and cannot be changed after document's creation.
+
+
+
+CREATE:
+
+1. db.collection.insertOne(object) - insert one document
+
+db.collection.insertOne(
+   <document>,
+   {
+      writeConcern: <document>
+   }
+)
+
+
+2. db.collection.insertMany([object1,object2,object3,.....]) - insert multiple documents
+
+3.Read
+
+db.collection.find(filter) - read a document
+
+4. Update
+
+db.collection.updateOne(filter,update action) - update a single document
+db.collection.updateMany(filter, update action) - update all documents that match.
+db.collection.replaceOne(filter,replacement) - replaces a single document
+
+
+5. Delete
+
+db.collection.deleteOne(filter) - removes a single document from a collection
+db.collection.deleteMany(filter) - removes all documents that match a filter
+
+
+
+
+
